@@ -35,7 +35,7 @@ class ChallengeComponent extends React.Component {
 
     handleChange(event) {
         const name = event.target.name;
-        this.state({
+        this.setState({
             [name]: event.target.value
         });
     }
