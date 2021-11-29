@@ -1,5 +1,6 @@
 import * as React from "react";
 import ApiClient from "../services/ApiClient";
+import LastAttemptsComponent from "./LastAttemptsComponent";
 
 class ChallengeComponent extends React.Component {
 
@@ -10,13 +11,18 @@ class ChallengeComponent extends React.Component {
             b: '',
             user: '',
             message: '',
-            guess: 0
+            guess: 0,
+            lastAttempts: []
         };
         this.handleSubmitResult = this.handleSubmitResult.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount(): void {
+        this.refreshChallenge();
+    }
+
+    refreshChallenge() {
         ApiClient.challenge().then(
             res => {
                 if (res.ok) {
@@ -27,7 +33,7 @@ class ChallengeComponent extends React.Component {
                         });
                     });
                 } else {
-                    this.updateMessage("Can't reach the server");
+                    this.updateMessage("Can't reach the server.");
                 }
             }
         );
@@ -55,6 +61,8 @@ class ChallengeComponent extends React.Component {
                     } else {
                         this.updateMessage("Ouch... Your guess " + json.resultAttempt + " is wrong :(");
                     }
+                    this.updateLastAttempts(this.state.user);
+                    this.refreshChallenge();
                 })
             } else {
                 this.updateMessage("Server error occurred. Try again later.");
@@ -68,12 +76,30 @@ class ChallengeComponent extends React.Component {
         });
     }
 
+    updateLastAttempts(userAlias: string) {
+        ApiClient.getAttempts(userAlias).then(res => {
+            if (res.ok) {
+                let attempts: Attempt[] = [];
+                res.json().then(data => {
+                    data.forEach(item => {
+                        attempts.push(item);
+                    });
+                    this.setState({
+                        lastAttempts: attempts
+                    });
+                })
+            }
+        });
+    }
+
     render() {
         return(
-            <div>
+            <div className="display-column">
                 <div>
                     <h3>Your new challenge is</h3>
-                    <h1>{this.state.a} X {this.state.b}</h1>
+                    <div className="challenge">
+                        <h1>{this.state.a} X {this.state.b}</h1>
+                    </div>
                 </div>
                 <form onSubmit={this.handleSubmitResult}>
                     <label>
@@ -99,6 +125,8 @@ class ChallengeComponent extends React.Component {
                     <input type="submit" value="Submit"/>
                 </form>
                 <h4>{this.state.message}</h4>
+                {this.state.lastAttempts.length > 0 &&
+                    <LastAttemptsComponent lastAttempts={this.state.lastAttempts}/>}
             </div>
         );
     }
