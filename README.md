@@ -1,4 +1,4 @@
-# Training Multiplicator project - frontend
+# Training microservices project - frontend
 Simple training project to learn microservices. <br>
 This repository is for the <b>React</b> based front-end service. <br>
 
