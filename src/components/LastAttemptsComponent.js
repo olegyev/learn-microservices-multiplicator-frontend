@@ -3,7 +3,7 @@ import * as React from 'react';
 class LastAttemptsComponent extends React.Component {
 
     render() {
-        return(
+        return (
             <table>
                 <thead>
                     <tr>
