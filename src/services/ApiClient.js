@@ -1,13 +1,14 @@
-class ChallengesApiClient {
+class ApiClient {
 
-    static SERVER_URL = 'http://localhost:8080';
+    static SERVER_URL = 'http://localhost:8000';
     static GET_CHALLENGE = '/challenges/random';
     static POST_RESULT = '/attempts';
     static GET_ATTEMPTS_BY_ALIAS = '/attempts?alias=';
     static GET_USERS_BY_IDS = '/users/';
+    static GET_LEADERBOARD = '/leaders';
 
     static challenge(): Promise<Response> {
-        return fetch(ChallengesApiClient.SERVER_URL + ChallengesApiClient.GET_CHALLENGE);
+        return fetch(ApiClient.SERVER_URL + ApiClient.GET_CHALLENGE);
     }
 
     static sendGuess(
@@ -16,7 +17,7 @@ class ChallengesApiClient {
         b: number,
         guess: number
     ): Promise<Response> {
-        return fetch(ChallengesApiClient.SERVER_URL + ChallengesApiClient.POST_RESULT,
+        return fetch(ApiClient.SERVER_URL + ApiClient.POST_RESULT,
             {
                 method: 'POST',
                 headers: {
@@ -34,17 +35,21 @@ class ChallengesApiClient {
     }
 
     static getAttempts(userAlias: string): Promise<Response> {
-        return fetch(ChallengesApiClient.SERVER_URL +
-                     ChallengesApiClient.GET_ATTEMPTS_BY_ALIAS +
+        return fetch(ApiClient.SERVER_URL +
+                     ApiClient.GET_ATTEMPTS_BY_ALIAS +
                      userAlias);
     }
 
     static getUsers(userIds: number[]): Promise<Response> {
-        return fetch(ChallengesApiClient.SERVER_URL +
-                     ChallengesApiClient.GET_USERS_BY_IDS +
+        return fetch(ApiClient.SERVER_URL +
+                     ApiClient.GET_USERS_BY_IDS +
                      userIds.join(','));
+    }
+
+    static leaderBoard(): Promise<Response> {
+        return fetch(ApiClient.SERVER_URL + ApiClient.GET_LEADERBOARD);
     }
 
 }
 
-export default ChallengesApiClient;
+export default ApiClient;

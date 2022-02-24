@@ -1,6 +1,5 @@
 import * as React from "react";
-import GameApiClient from "../services/GameApiClient";
-import ChallengesApiClient from "../services/ChallengesApiClient";
+import ApiClient from "../services/ApiClient";
 
 class LeaderBoardComponent extends React.Component {
 
@@ -19,7 +18,7 @@ class LeaderBoardComponent extends React.Component {
     }
 
     getLeaderBoardData(): Promise {
-        return GameApiClient.leaderBoard().then(
+        return ApiClient.leaderBoard().then(
             lbRes => {
                 if (lbRes.ok) {
                     return lbRes.json();
@@ -31,7 +30,7 @@ class LeaderBoardComponent extends React.Component {
     }
 
     getUserAliasData(userIds: number[]): Promise {
-        return ChallengesApiClient.getUsers(userIds).then(
+        return ApiClient.getUsers(userIds).then(
             usRes => {
                 if (usRes.ok) {
                     return usRes.json();
